@@ -168,15 +168,15 @@ public class MaterialProgressDrawable_  extends Drawable implements Animatable {
     }
 
     /**
-     * Update the background color of the circle image view.
+     * Update the background colors of the circle image view.
      */
     public void setBackgroundColor(int color) {
         mRing.setBackgroundColor(color);
     }
 
     /**
-     * Set the colors used in the progress animation from color resources.
-     * The first color will also be the color of the bar that grows in response
+     * Set the colors used in the progress animation from colors resources.
+     * The first colors will also be the colors of the bar that grows in response
      * to a user swipe gesture.
      *
      * @param colors
@@ -392,7 +392,7 @@ public class MaterialProgressDrawable_  extends Drawable implements Animatable {
         private int[] mColors;
         // mColorIndex represents the offset into the available mColors that the
         // progress circle should currently display. As the progress circle is
-        // animating, the mColorIndex moves by one to the next available color.
+        // animating, the mColorIndex moves by one to the next available colors.
         private int mColorIndex;
         private float mStartingStartTrim;
         private float mStartingEndTrim;
@@ -498,12 +498,12 @@ public class MaterialProgressDrawable_  extends Drawable implements Animatable {
          */
         public void setColors(@NonNull int[] colors) {
             mColors = colors;
-            // if colors are reset, make sure to reset the color index as well
+            // if colors are reset, make sure to reset the colors index as well
             setColorIndex(0);
         }
 
         /**
-         * @param index Index into the color array of the color to display in
+         * @param index Index into the colors array of the colors to display in
          *            the progress spinner.
          */
         public void setColorIndex(int index) {
@@ -511,7 +511,7 @@ public class MaterialProgressDrawable_  extends Drawable implements Animatable {
         }
 
         /**
-         * Proceed to the next available ring color. This will automatically
+         * Proceed to the next available ring colors. This will automatically
          * wrap back to the beginning of colors.
          */
         public void goToNextColor() {

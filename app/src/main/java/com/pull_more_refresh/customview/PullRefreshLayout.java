@@ -132,10 +132,8 @@ public class PullRefreshLayout extends ViewGroup {
                 // Make sure the progress view is fully visible
                 mProgress.setAlpha(MAX_ALPHA);
                 mProgress.start();
-                if (mNotify) {
-                    if (mListener != null) {
-                        mListener.onRefresh();
-                    }
+                if (mNotify && mListener != null) {
+                    mListener.onRefresh();
                 }
             } else {
                 mProgress.stop();
@@ -401,16 +399,16 @@ public class PullRefreshLayout extends ViewGroup {
     }
 
     /**
-     * Set the background color of the progress spinner disc.
+     * Set the background colors of the progress spinner disc.
      *
-     * @param colorRes Resource id of the color.
+     * @param colorRes Resource id of the colors.
      */
     public void setProgressBackgroundColorSchemeResource(int colorRes) {
         setProgressBackgroundColorSchemeColor(getResources().getColor(colorRes));
     }
 
     /**
-     * Set the background color of the progress spinner disc.
+     * Set the background colors of the progress spinner disc.
      *
      * @param color
      */
@@ -428,8 +426,8 @@ public class PullRefreshLayout extends ViewGroup {
     }
 
     /**
-     * Set the color resources used in the progress animation from color resources.
-     * The first color will also be the color of the bar that grows in response
+     * Set the colors resources used in the progress animation from colors resources.
+     * The first colors will also be the colors of the bar that grows in response
      * to a user swipe gesture.
      *
      * @param colorResIds
@@ -445,7 +443,7 @@ public class PullRefreshLayout extends ViewGroup {
 
     /**
      * Set the colors used in the progress animation. The first
-     * color will also be the color of the bar that grows in response to a user
+     * colors will also be the colors of the bar that grows in response to a user
      * swipe gesture.
      *
      * @param colors
@@ -645,10 +643,11 @@ public class PullRefreshLayout extends ViewGroup {
                 break;
 
             case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_CANCEL:
+            case MotionEvent.ACTION_CANCEL: {
                 mIsBeingDragged = false;
                 mActivePointerId = INVALID_POINTER;
                 break;
+            }
         }
 
         return mIsBeingDragged;

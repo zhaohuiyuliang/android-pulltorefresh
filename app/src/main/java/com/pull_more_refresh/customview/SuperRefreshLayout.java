@@ -22,7 +22,7 @@ public class SuperRefreshLayout extends PullRefreshLayout implements AbsListView
 
     private boolean mIsOnLoading = false;
 
-    private boolean mCanLoadMore = false;
+    private boolean mCanLoadMore = true;
 
     private int mYDown;
 
@@ -50,8 +50,11 @@ public class SuperRefreshLayout extends PullRefreshLayout implements AbsListView
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         // 滚动到最底部
-        if (canLoad()) {
-            loadData();
+        if (canLoad() && (mListener != null)) {
+            setIsOnLoading(true);
+            mListener.onLoadMore();
+        } else {
+
         }
     }
 
@@ -93,12 +96,8 @@ public class SuperRefreshLayout extends PullRefreshLayout implements AbsListView
     }
 
 
-    public void setCanLoadMore() {
-        this.mCanLoadMore = true;
-    }
-
-    public void setNoMoreData() {
-        this.mCanLoadMore = false;
+    public void setCanLoadMore(boolean can) {
+        this.mCanLoadMore = can;
     }
 
     @Override
@@ -127,7 +126,7 @@ public class SuperRefreshLayout extends PullRefreshLayout implements AbsListView
     }
 
     /**
-     * 判断加载更多, 条件是到了最底部, listview不在加载中, 且为上拉操作.
+     * 判断加载更多, 条件是到了最底部, ListView不在加载中, 且为上拉操作.
      *
      * @return 是否可以加载更多
      */
@@ -135,15 +134,6 @@ public class SuperRefreshLayout extends PullRefreshLayout implements AbsListView
         return isInBottom() && !mIsOnLoading && isPullUp() && mCanLoadMore;
     }
 
-    /**
-     * 如果到了最底部,而且是上拉操作.那么执行onLoad方法
-     */
-    private void loadData() {
-        if (mListener != null) {
-            setIsOnLoading(true);
-            mListener.onLoadMore();
-        }
-    }
 
     /**
      * 是否是上拉操作
@@ -182,11 +172,11 @@ public class SuperRefreshLayout extends PullRefreshLayout implements AbsListView
     }
 
     /**
-     * 加载结束记得调用
+     * 下拉加载结束记得调用
      */
     public void onLoadComplete() {
         setIsOnLoading(false);
-        setRefreshing(false);
+        super.setRefreshing(false);
     }
 
     /**
