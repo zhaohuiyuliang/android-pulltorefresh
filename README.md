@@ -1,6 +1,8 @@
 # Pull To Refresh for Android
 
-This project aims to provide a reusable pull to refresh widget for Android.
+1.不需要刷新列表数据
+2.只需要下拉刷新数据
+3.只需上拉刷新数据
 
 ![Screenshot](https://github.com/johannilsson/android-pulltorefresh/raw/master/android-pull-to-refresh.png)
 
