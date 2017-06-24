@@ -62,6 +62,8 @@ public class SuperRefreshLayout extends PullRefreshLayout implements AbsListView
     public void onRefresh() {
         if (mListener != null && !mIsOnLoading) {
             mListener.onRefreshing();
+        } else {
+            onLoadComplete();
         }
     }
 
@@ -83,7 +85,8 @@ public class SuperRefreshLayout extends PullRefreshLayout implements AbsListView
             View childView = getChildAt(0);
             if (childView instanceof ListView) {
                 mListView = (ListView) childView;
-                // 设置滚动监听器给ListView, 使得滚动的情况下也可以自动加载
+                // 设置滚动监听器给ListView,
+                // 使得滚动的情况下也可以自动加载
                 mListView.setOnScrollListener(this);
             }
         }

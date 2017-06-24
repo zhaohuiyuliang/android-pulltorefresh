@@ -6,6 +6,6 @@
     <ImageView
         android:id="@+id/img_pht"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="180dp"/>
 
 </RelativeLayout>
