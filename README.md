@@ -7,19 +7,26 @@
 
 Repository at <https://github.com/zhaohuiyuliang/android-pulltorefresh>.
 
-## Usage
+## 使用方式
 
-### Layout
+### 布局文件
 
 ``` xml
 <!--
-  The PullToRefreshListView replaces a standard ListView widget.
+  The SuperRefreshLayout replaces a standard ListView widget.
 -->
-<com.markupartist.android.widget.PullToRefreshListView
-    android:id="@+id/android:list"
-    android:layout_height="fill_parent"
-    android:layout_width="fill_parent"
-    />
+    <com.pull_more_refresh.customview.SuperRefreshLayout
+        android:id="@+id/superRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.pull_more_refresh.customview.PullListView
+            android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none"
+            android:dividerHeight="1px"/>
+    </com.pull_more_refresh.customview.SuperRefreshLayout>
 ```
 
 ### Activity
