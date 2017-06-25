@@ -1,8 +1,9 @@
 # 下拉刷新
 
-
-
 ![下拉刷新](https://github.com/zhaohuiyuliang/android-pulltorefresh/blob/master/raw/master/pull_refresh.png)
+
+#上拉加载更多
+![下拉加载更多](https://github.com/zhaohuiyuliang/android-pulltorefresh/blob/master/raw/master/more_refresh.png)
 
 Repository at <https://github.com/zhaohuiyuliang/android-pulltorefresh>.
 
