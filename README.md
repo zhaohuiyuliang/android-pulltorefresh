@@ -1,12 +1,10 @@
-# Pull To Refresh for Android
+# 下拉刷新
 
-1.不需要刷新列表数据
-2.只需要下拉刷新数据
-3.只需上拉刷新数据
 
-![Screenshot](https://github.com/johannilsson/android-pulltorefresh/raw/master/android-pull-to-refresh.png)
 
-Repository at <https://github.com/johannilsson/android-pulltorefresh>.
+![Screenshot](https://github.com/zhaohuiyuliang/android-pulltorefresh/raw/master/pull_refresh.png)
+
+Repository at <https://github.com/zhaohuiyuliang/android-pulltorefresh>.
 
 ## Usage
 
