@@ -8,29 +8,27 @@ import android.view.ViewConfiguration;
 import android.widget.AbsListView;
 import android.widget.ListView;
 
+import static com.pull_more_refresh.customview.PullListView.TYPE_MORE.TYPE_NO_MORE;
+
 /**
  * 在下拉刷新的基础上增加上拉加载更多功能
  */
 @SuppressWarnings("unused")
 public class SuperRefreshLayout extends PullRefreshLayout implements AbsListView.OnScrollListener,
         PullRefreshLayout.OnRefreshListener {
-    private ListView mListView;
+    private PullListView mPullListView;
 
     private int mTouchSlop;
 
     private SuperRefreshLayoutListener mListener;
 
-    private boolean mIsOnLoading = false;
 
     private boolean mCanLoadMore = true;
 
-    private int mYDown;
 
-    private int mLastY;
 
     private int mTextColor;
     private int mFooterBackground;
-    private boolean mIsMoving = false;
 
     public SuperRefreshLayout(Context context) {
         this(context, null);
@@ -49,12 +47,12 @@ public class SuperRefreshLayout extends PullRefreshLayout implements AbsListView
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        // 滚动到最底部
-        if (canLoad() && (mListener != null)) {
-            setIsOnLoading(true);
-            mListener.onLoadMore();
-        } else {
-
+        if (isInBottom()/*滚动到最底部*/ ) {
+            if (canLoad() && (mListener != null)) {
+                mListener.onLoadMore();
+            } else {
+                mPullListView.setFooterType(TYPE_NO_MORE);
+            }
         }
     }
 
@@ -63,10 +61,10 @@ public class SuperRefreshLayout extends PullRefreshLayout implements AbsListView
      */
     @Override
     public void onRefresh() {
-        if (mListener != null && !mIsOnLoading) {
+        if (mListener != null) {
             mListener.onRefreshing();
         } else {
-            onLoadComplete();
+            super.setRefreshing(false);
         }
     }
 
@@ -74,7 +72,7 @@ public class SuperRefreshLayout extends PullRefreshLayout implements AbsListView
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
         // 初始化ListView对象
-        if (mListView == null) {
+        if (mPullListView == null) {
             getListView();
         }
     }
@@ -84,13 +82,14 @@ public class SuperRefreshLayout extends PullRefreshLayout implements AbsListView
      */
     private void getListView() {
         int child = getChildCount();
-        if (child > 0) {
-            View childView = getChildAt(0);
+        for (int i = 0; i < child; i++) {
+            View childView = getChildAt(i);
             if (childView instanceof ListView) {
-                mListView = (ListView) childView;
+                mPullListView = (PullListView) childView;
                 // 设置滚动监听器给ListView,
                 // 使得滚动的情况下也可以自动加载
-                mListView.setOnScrollListener(this);
+                mPullListView.setOnScrollListener(this);
+                break;
             }
         }
     }
@@ -105,17 +104,13 @@ public class SuperRefreshLayout extends PullRefreshLayout implements AbsListView
         final int action = event.getAction();
         switch (action) {
             case MotionEvent.ACTION_DOWN: {
-                mYDown = (int) event.getRawY();
                 break;
             }
 
             case MotionEvent.ACTION_MOVE: {
-                mIsMoving = true;
-                mLastY = (int) event.getRawY();
                 break;
             }
             case MotionEvent.ACTION_UP: {
-                mIsMoving = false;
                 break;
             }
             default: {
@@ -131,53 +126,19 @@ public class SuperRefreshLayout extends PullRefreshLayout implements AbsListView
      * @return 是否可以加载更多
      */
     private boolean canLoad() {
-        return isInBottom() && !mIsOnLoading && isPullUp() && mCanLoadMore;
+        return mCanLoadMore;
     }
 
 
-    /**
-     * 是否是上拉操作
-     *
-     * @return 是否是上拉操作
-     */
-    private boolean isPullUp() {
-        return (mYDown - mLastY) >= mTouchSlop;
-    }
 
     /**
-     * 设置正在加载
-     *
-     * @param loading loading
-     */
-    public void setIsOnLoading(boolean loading) {
-        mIsOnLoading = loading;
-        if (!mIsOnLoading) {
-            mYDown = 0;
-            mLastY = 0;
-        }
-    }
-
-
-    /**
-     * 判断是否到了最底部
+     * 判断滑到ListView最底
      */
     private boolean isInBottom() {
-        return (mListView != null && mListView.getAdapter() != null)
-                && mListView.getLastVisiblePosition() == (mListView.getAdapter().getCount() - 1);
+        return (mPullListView != null && mPullListView.getAdapter() != null)
+                && mPullListView.getLastVisiblePosition() == (mPullListView.getAdapter().getCount() - 1);
     }
 
-
-    public boolean isMoving() {
-        return mIsMoving;
-    }
-
-    /**
-     * 下拉加载结束记得调用
-     */
-    public void onLoadComplete() {
-        setIsOnLoading(false);
-        super.setRefreshing(false);
-    }
 
     /**
      * set

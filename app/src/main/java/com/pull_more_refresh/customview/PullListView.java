@@ -19,13 +19,15 @@ public class PullListView extends ListView {
 
     private ProgressBar mFooterProgressBar;
 
+    private View mFooterView;
+
     public PullListView(Context context, AttributeSet attrs) {
         super(context, attrs);
         createFooter();
     }
 
     private void createFooter() {
-        View mFooterView = LayoutInflater.from(getContext()).inflate(R.layout.layout_list_view_footer, null);
+        mFooterView = LayoutInflater.from(getContext()).inflate(R.layout.layout_list_view_footer, null);
         mFooterText = mFooterView.findViewById(R.id.tv_footer);
         mFooterProgressBar = mFooterView.findViewById(R.id.pb_footer);
         mFooterView.setVisibility(View.VISIBLE);
@@ -62,8 +64,15 @@ public class PullListView extends ListView {
                 break;
             }
             case TYPE_HIDE: {
-                mFooterText.setVisibility(View.GONE);
+                mFooterText.setText(getResources().getString(R.string.footer_type_not_more));
                 mFooterProgressBar.setVisibility(View.GONE);
+                postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        removeFooterView(mFooterView);
+                    }
+                }, 1000);
+
                 break;
             }
         }

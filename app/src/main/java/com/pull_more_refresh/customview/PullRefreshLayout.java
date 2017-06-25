@@ -593,6 +593,11 @@ public class PullRefreshLayout extends ViewGroup {
         }
     }
 
+    /**
+     * 事件拦截函数
+     * @param ev
+     * @return
+     */
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         ensureTarget();
@@ -615,6 +620,7 @@ public class PullRefreshLayout extends ViewGroup {
                 mIsBeingDragged = false;
                 final float initialDownY = getMotionEventY(ev, mActivePointerId);
                 if (initialDownY == -1) {
+                    /***/
                     return false;
                 }
                 mInitialDownY = initialDownY;
@@ -633,6 +639,7 @@ public class PullRefreshLayout extends ViewGroup {
                 final float yDiff = y - mInitialDownY;
                 if (yDiff > mTouchSlop && !mIsBeingDragged) {
                     mInitialMotionY = mInitialDownY + mTouchSlop;
+                    /**表示消费了Move事件，MotionEvent事件不再传递*/
                     mIsBeingDragged = true;
                     mProgress.setAlpha(STARTING_PROGRESS_ALPHA);
                 }
