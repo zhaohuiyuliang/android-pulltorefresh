@@ -704,16 +704,16 @@ public class PullRefreshLayout extends ViewGroup {
                 }
 
                 final float y = MotionEventCompat.getY(ev, pointerIndex);
-                final float overscrollTop = (y - mInitialMotionY) * DRAG_RATE;
+                final float overScrollTop = (y - mInitialMotionY) * DRAG_RATE;
                 if (mIsBeingDragged) {
                     mProgress.showArrow(true);
-                    float originalDragPercent = overscrollTop / mTotalDragDistance;
+                    float originalDragPercent = overScrollTop / mTotalDragDistance;
                     if (originalDragPercent < 0) {
                         return false;
                     }
                     float dragPercent = Math.min(1f, Math.abs(originalDragPercent));
                     float adjustedPercent = (float) Math.max(dragPercent - .4, 0) * 5 / 3;
-                    float extraOS = Math.abs(overscrollTop) - mTotalDragDistance;
+                    float extraOS = Math.abs(overScrollTop) - mTotalDragDistance;
                     float slingshotDist = mUsingCustomStart ? mSpinnerFinalOffset
                             - mOriginalOffsetTop : mSpinnerFinalOffset;
                     float tensionSlingshotPercent = Math.max(0,
@@ -732,9 +732,9 @@ public class PullRefreshLayout extends ViewGroup {
                         ViewCompat.setScaleX(mCircleView, 1f);
                         ViewCompat.setScaleY(mCircleView, 1f);
                     }
-                    if (overscrollTop < mTotalDragDistance) {
+                    if (overScrollTop < mTotalDragDistance) {
                         if (mScale) {
-                            setAnimationProgress(overscrollTop / mTotalDragDistance);
+                            setAnimationProgress(overScrollTop / mTotalDragDistance);
                         }
                         if (mProgress.getAlpha() > STARTING_PROGRESS_ALPHA
                                 && !isAnimationRunning(mAlphaStartAnimation)) {

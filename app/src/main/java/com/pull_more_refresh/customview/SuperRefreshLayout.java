@@ -26,7 +26,6 @@ public class SuperRefreshLayout extends PullRefreshLayout implements AbsListView
     private boolean mCanLoadMore = true;
 
 
-
     private int mTextColor;
     private int mFooterBackground;
 
@@ -47,7 +46,7 @@ public class SuperRefreshLayout extends PullRefreshLayout implements AbsListView
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        if (isInBottom()/*滚动到最底部*/ ) {
+        if (isInBottom()/*滚动到最底部*/) {
             if (canLoad() && (mListener != null)) {
                 mListener.onLoadMore();
             } else {
@@ -99,6 +98,13 @@ public class SuperRefreshLayout extends PullRefreshLayout implements AbsListView
         this.mCanLoadMore = can;
     }
 
+    /**
+     * 事件分发函数
+     * MotionEvent进入SuperRefreshLayout布局中从这里开发分开
+     *
+     * @param event 分发的事件对象
+     * @return true 事件需要向下分发; false 事件不需要分发返回上一次;
+     */
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         final int action = event.getAction();
@@ -128,7 +134,6 @@ public class SuperRefreshLayout extends PullRefreshLayout implements AbsListView
     private boolean canLoad() {
         return mCanLoadMore;
     }
-
 
 
     /**
