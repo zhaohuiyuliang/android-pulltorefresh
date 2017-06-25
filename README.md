@@ -2,7 +2,7 @@
 
 
 
-![Screenshot](https://github.com/zhaohuiyuliang/android-pulltorefresh/raw/master/pull_refresh.png)
+![下拉刷新](https://github.com/zhaohuiyuliang/android-pulltorefresh/blob/master/raw/master/pull_refresh.png)
 
 Repository at <https://github.com/zhaohuiyuliang/android-pulltorefresh>.
 
