@@ -5,7 +5,8 @@ import android.os.Bundle;
 import android.os.Message;
 import android.widget.ImageView;
 
-import com.pull_more_refresh.net.ReadWebContent;
+import com.pull_more_refresh.task.PhtoTask;
+import com.pull_more_refresh.task.ThreadTask;
 
 /**
  * Created by wangliang on 2017/6/27.
@@ -38,17 +39,8 @@ public class TestAt extends BaseActivity {
 
     @Override
     void loadData() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Bitmap bitmap = ReadWebContent.getInstance().loadBitmap("http://img.sj33.cn/uploads/allimg/201302/1-130201105055.jpg");
-                Message message = Message.obtain();
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("bitmap", bitmap);
-                message.setData(bundle);
-                mUIHandler.sendMessage(message);
-            }
-        }).start();
+        PhtoTask phtoTask = new PhtoTask("http://img.sj33.cn/uploads/allimg/201302/1-130201105055.jpg", mUIHandler);
+       new ThreadTask(phtoTask).start();
 
     }
 }
