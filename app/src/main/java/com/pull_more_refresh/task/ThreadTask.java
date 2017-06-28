@@ -69,7 +69,7 @@ public class ThreadTask implements ReadWebContent.LoadListener {
     private void handleRequest(BeanImp task) {
         switch (task.getTYPE()) {
             case BITMAP: {
-                ReadWebContent.getInstance(this).loadBitmap(mWebTask.getUrl());
+                new ReadWebContent(this).loadBitmap(mWebTask.getUrl());
                 break;
             }
         }

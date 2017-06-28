@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.pull_more_refresh.R;
 import com.pull_more_refresh.control.ImageControl;
@@ -50,18 +51,21 @@ public class AdapterImg extends AbsBaseAdapter {
             viewhold = new ViewHold();
             convertView = LayoutInflater.from(mContext).inflate(R.layout.item_list_view_pht, null);
             viewhold.img_pht = convertView.findViewById(R.id.img_pht);
+            viewhold.tv_id = convertView.findViewById(R.id.tv_id);
             convertView.setTag(viewhold);
         } else {
             viewhold = (ViewHold) convertView.getTag();
         }
-        ImageBean imageOj = mImageOjList.get(position);
-        viewhold.img_pht.setTag(imageOj.getID());
-        mImageControl.loadImage(imageOj, viewhold.img_pht);
+        ImageBean imageBean = mImageOjList.get(position);
+        viewhold.img_pht.setTag(imageBean.getID());
+        mImageControl.loadImage(imageBean, viewhold.img_pht);
+        viewhold.tv_id.setText(String.valueOf(imageBean.getID()) + " *** "+imageBean.getFileName());
         return convertView;
     }
 
     class ViewHold {
         ImageView img_pht;
+        TextView tv_id;
     }
 
 

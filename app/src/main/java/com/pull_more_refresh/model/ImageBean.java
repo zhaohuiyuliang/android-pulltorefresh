@@ -14,11 +14,20 @@ public class ImageBean extends AbsWeb implements BeanImp {
 
     @Override
     public String getFileName() {
-        StringBuffer stringBuffer = new StringBuffer(getID());
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append(String.valueOf(getID()));
         String url = getUrl();
-        int index = url.lastIndexOf(".");
-        String type = url.substring(index);
-        stringBuffer.append(type);
+        /**图片url不存在后缀的情况*/
+
+        int index = url.lastIndexOf("/");
+        String urlBehind = url.substring(index);
+        if (urlBehind.contains(".")) {
+            index = urlBehind.lastIndexOf(".");
+            String type = urlBehind.substring(index);
+            stringBuffer.append(type);
+        } else {
+            stringBuffer.append(".png");
+        }
         return stringBuffer.toString();
     }
 

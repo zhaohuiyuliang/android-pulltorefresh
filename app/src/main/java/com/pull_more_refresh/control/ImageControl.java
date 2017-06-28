@@ -48,6 +48,7 @@ public class ImageControl extends BaseControl {
                     Bundle bundle = msg.getData();
                     if (bundle != null) {
                         Bitmap bitmap = bundle.getParcelable(Constants.KEY_BITMAP);
+                        bitmapMap.put(String.valueOf(imageBean.getID()), bitmap);
                         if (img_pht.getTag().equals(imageBean.getID())) {
                             img_pht.setImageBitmap(bitmap);
                         }
@@ -63,10 +64,8 @@ public class ImageControl extends BaseControl {
 
         } else if (isSaveImageInSD(imageBean.getFileName())) {/**检查SD卡*/
             try {
-
                 Bitmap bitmap = getBitmapFromSD(imageBean.getFileName());
                 handlerBitmap(bitmap);
-                bitmapMap.put(String.valueOf(imageBean.getID()), bitmap);
             } catch (IOException e) {
                 e.printStackTrace();
                 new ThreadTask(imageBean, mUIHandler).start();

@@ -19,22 +19,10 @@ import java.util.Map;
 
 public class ReadWebContent {
 
-    private static ReadWebContent sReadWebContent;
     private LoadListener mLoadListener;
 
-    private ReadWebContent(LoadListener mLoadListener) {
+    public ReadWebContent(LoadListener mLoadListener) {
         this.mLoadListener = mLoadListener;
-    }
-
-    public static final ReadWebContent getInstance(LoadListener mLoadListener) {
-        if (sReadWebContent == null) {
-            synchronized (ReadWebContent.class) {
-                if (sReadWebContent == null) {
-                    sReadWebContent = new ReadWebContent(mLoadListener);
-                }
-            }
-        }
-        return sReadWebContent;
     }
 
     public void loadBitmap(String url) {

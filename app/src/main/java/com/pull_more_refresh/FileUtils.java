@@ -24,7 +24,7 @@ public class FileUtils {
         }
         return true;
     }
-    public static boolean saveImageToSD(InputStream inputStream, String fileName) throws IOException {
+    public static synchronized boolean saveImageToSD(InputStream inputStream, String fileName) throws IOException {
         File sdFile = getSDDataPath();
         String path = sdFile.getAbsolutePath() + File.separator + Constants.IMAGE_PATH + File.separator + fileName;
         File file = new File(path);
