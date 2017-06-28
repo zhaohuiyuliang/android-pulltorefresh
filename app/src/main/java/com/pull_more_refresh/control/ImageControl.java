@@ -12,7 +12,9 @@ import com.pull_more_refresh.adapter.AbsBaseAdapter;
 import com.pull_more_refresh.model.BeanImp;
 import com.pull_more_refresh.model.ImageBean;
 import com.pull_more_refresh.net.URLConstants;
-import com.pull_more_refresh.task.ThreadTask;
+import com.pull_more_refresh.task.LIFOTask;
+import com.pull_more_refresh.task.LIFOThreadPoolProcessor;
+import com.pull_more_refresh.task.TaskR;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,12 +28,14 @@ import java.util.Map;
  * Created by wangliang on 2017/6/28.
  */
 
-public class ImageControl extends BaseControl implements ThreadTask.BitmapListener {
+public class ImageControl extends BaseControl implements TaskR.BitmapListener {
     private Map<String, Bitmap> bitmapMap;
     private AbsBaseAdapter mAbsBaseAdapter;
+    private LIFOThreadPoolProcessor mPoolProcessor;
 
     public ImageControl(AbsBaseAdapter mAbsBaseAdapter) {
         this.mAbsBaseAdapter = mAbsBaseAdapter;
+        mPoolProcessor = new LIFOThreadPoolProcessor(50);
     }
 
     public static List<ImageBean> getTestData() {
@@ -73,11 +77,11 @@ public class ImageControl extends BaseControl implements ThreadTask.BitmapListen
             } catch (IOException e) {
                 e.printStackTrace();
                 img_pht.setImageBitmap(null);
-                new ThreadTask(imageBean, this).start();
+                mPoolProcessor.submitTask(new LIFOTask(new TaskR(imageBean, this)));
             }
         } else {
             img_pht.setImageBitmap(null);
-            new ThreadTask(imageBean, this).start();
+            mPoolProcessor.submitTask(new LIFOTask(new TaskR(imageBean, this)));
         }
     }
 

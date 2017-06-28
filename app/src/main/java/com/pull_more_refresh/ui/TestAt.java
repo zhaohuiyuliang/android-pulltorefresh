@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import com.pull_more_refresh.R;
 import com.pull_more_refresh.model.ImageBean;
 import com.pull_more_refresh.net.URLConstants;
-import com.pull_more_refresh.task.ThreadTask;
 
 /**
  * Created by wangliang on 2017/6/27.
@@ -42,6 +41,6 @@ public class TestAt extends BaseActivity {
     @Override
     void loadData() {
         ImageBean imageBean = new ImageBean(URLConstants.url3);
-       new ThreadTask(imageBean, null).start();
+//       new LIFOTask(imageBean, null).start();
     }
 }
