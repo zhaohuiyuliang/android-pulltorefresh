@@ -7,6 +7,7 @@ import com.pull_more_refresh.UIHandler;
  */
 
 public abstract class WebTask {
+    private static int ID_ = 0;
     private int ID;
     private String url;
     private UIHandler mUIHandler;
@@ -16,6 +17,7 @@ public abstract class WebTask {
         this.url = url;
         this.mTYPE = mTYP;
         this.mUIHandler = mUIHandler;
+        ID = ++ID_;
     }
 
     public UIHandler getUIHandler() {

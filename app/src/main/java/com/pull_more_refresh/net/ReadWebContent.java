@@ -3,6 +3,8 @@ package com.pull_more_refresh.net;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -18,29 +20,45 @@ import java.util.Map;
 public class ReadWebContent {
 
     private static ReadWebContent sReadWebContent;
+    private LoadListener mLoadListener;
 
-    private ReadWebContent() {
-
+    private ReadWebContent(LoadListener mLoadListener) {
+        this.mLoadListener = mLoadListener;
     }
 
-    public static final ReadWebContent getInstance() {
+    public static final ReadWebContent getInstance(LoadListener mLoadListener) {
         if (sReadWebContent == null) {
             synchronized (ReadWebContent.class) {
                 if (sReadWebContent == null) {
-                    sReadWebContent = new ReadWebContent();
+                    sReadWebContent = new ReadWebContent(mLoadListener);
                 }
             }
         }
         return sReadWebContent;
     }
 
-    public Bitmap loadBitmap(String url) {
-        InputStream loadInputStream = loadInputStream(url);
-        Bitmap bitmap = BitmapFactory.decodeStream(loadInputStream);
-        return  bitmap;
+    public void loadBitmap(String url) {
+        InputStream input = loadInputStream(url);
+
+        ByteArrayOutputStream bysStream = new ByteArrayOutputStream();
+
+        byte[] buffer = new byte[1024];
+        int len;
+        try {
+            while ((len = input.read(buffer)) > -1) {
+                bysStream.write(buffer, 0, len);
+            }
+            bysStream.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Bitmap bitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(bysStream.toByteArray()));
+        if (mLoadListener != null) {
+            mLoadListener.handlerBitmap(bitmap);
+            mLoadListener.saveFile(bitmap);
+            mLoadListener.saveFile(new ByteArrayInputStream(bysStream.toByteArray()));
+        }
     }
-
-
 
     private URLConnection getURLConnection(String url) {
         HttpURLConnection httpURLConnection = null;
@@ -80,5 +98,13 @@ public class ReadWebContent {
             }
         }
         return inputStream;
+    }
+
+    public interface LoadListener {
+        void handlerBitmap(Bitmap bitmap);
+
+        void saveFile(Bitmap bitmap);
+
+        void saveFile(InputStream inputStream);
     }
 }

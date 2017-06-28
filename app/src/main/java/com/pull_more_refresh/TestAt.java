@@ -5,7 +5,8 @@ import android.os.Bundle;
 import android.os.Message;
 import android.widget.ImageView;
 
-import com.pull_more_refresh.task.PhtoTask;
+import com.pull_more_refresh.net.URLConstants;
+import com.pull_more_refresh.task.ImageTask;
 import com.pull_more_refresh.task.ThreadTask;
 
 /**
@@ -39,8 +40,8 @@ public class TestAt extends BaseActivity {
 
     @Override
     void loadData() {
-        PhtoTask phtoTask = new PhtoTask("http://img.sj33.cn/uploads/allimg/201302/1-130201105055.jpg", mUIHandler);
-       new ThreadTask(phtoTask).start();
+        ImageTask imageTask = new ImageTask(URLConstants.url3, mUIHandler);
+       new ThreadTask(imageTask).start();
 
     }
 }
