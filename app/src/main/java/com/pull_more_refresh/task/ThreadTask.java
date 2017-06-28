@@ -2,12 +2,15 @@ package com.pull_more_refresh.task;
 
 import android.graphics.Bitmap;
 
+import com.pull_more_refresh.Constants;
 import com.pull_more_refresh.FileUtils;
 import com.pull_more_refresh.model.BeanImp;
 import com.pull_more_refresh.net.ReadWebContent;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 /**
  * Created by wangliang on 2017/6/27.
@@ -23,19 +26,21 @@ public class ThreadTask implements ReadWebContent.LoadListener {
         }
     };
     private BitmapListener mBitmapListener;
+    private static final Executor mExecutor = Executors.newFixedThreadPool(Constants.NTHREADS);
 
-    public ThreadTask(BeanImp task) {
+    public ThreadTask(BeanImp task, BitmapListener bitmapListener) {
         this.mWebTask = task;
+        mBitmapListener = bitmapListener;
     }
 
     public void start() {
-        new Thread(task).start();
+        mExecutor.execute(task);
     }
 
     @Override
     public void handlerBitmap(Bitmap bitmap) {
         if (mBitmapListener != null) {
-            mBitmapListener.handlerBitmap(bitmap);
+            mBitmapListener.handlerBitmap(bitmap, mWebTask);
         }
     }
 

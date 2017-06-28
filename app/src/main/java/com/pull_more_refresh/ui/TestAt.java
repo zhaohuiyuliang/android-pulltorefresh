@@ -42,6 +42,6 @@ public class TestAt extends BaseActivity {
     @Override
     void loadData() {
         ImageBean imageBean = new ImageBean(URLConstants.url3);
-       new ThreadTask(imageBean, mUIHandler).start();
+       new ThreadTask(imageBean, null).start();
     }
 }

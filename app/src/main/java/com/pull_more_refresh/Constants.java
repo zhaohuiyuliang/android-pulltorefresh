@@ -7,5 +7,8 @@ package com.pull_more_refresh;
 public class Constants {
     public static String IMAGE_PATH = "images";
     public static String KEY_BITMAP = "KEY_BITMAP";
-    public static String KEY_BEANIMP = "KEY_BEANIMP";
+    public static String KEY_BEAN_IMP = "KEY_BEAN_IMP";
+
+    public static int NTHREADS = 30;
+
 }

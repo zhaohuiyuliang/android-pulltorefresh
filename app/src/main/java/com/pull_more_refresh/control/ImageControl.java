@@ -52,7 +52,7 @@ public class ImageControl extends BaseControl implements ThreadTask.BitmapListen
 
                     if (bundle != null) {
                         Bitmap bitmap = bundle.getParcelable(Constants.KEY_BITMAP);
-                        ImageBean imageBean = (ImageBean) bundle.getSerializable(Constants.KEY_BEANIMP);
+                        ImageBean imageBean = (ImageBean) bundle.getSerializable(Constants.KEY_BEAN_IMP);
 
                         bitmapMap.put(String.valueOf(imageBean.getID()), bitmap);
                         mAbsBaseAdapter.notifyDataSetChanged();
@@ -73,11 +73,11 @@ public class ImageControl extends BaseControl implements ThreadTask.BitmapListen
             } catch (IOException e) {
                 e.printStackTrace();
                 img_pht.setImageBitmap(null);
-                new ThreadTask(imageBean).start();
+                new ThreadTask(imageBean, this).start();
             }
         } else {
             img_pht.setImageBitmap(null);
-            new ThreadTask(imageBean).start();
+            new ThreadTask(imageBean, this).start();
         }
     }
 
@@ -108,7 +108,7 @@ public class ImageControl extends BaseControl implements ThreadTask.BitmapListen
         Message message = Message.obtain();
         Bundle bundle = new Bundle();
         bundle.putParcelable(Constants.KEY_BITMAP, bitmap);
-        bundle.putSerializable(Constants.KEY_BEANIMP, beanImp);
+        bundle.putSerializable(Constants.KEY_BEAN_IMP, beanImp);
         message.setData(bundle);
         mUIHandler.sendMessage(message);
     }
