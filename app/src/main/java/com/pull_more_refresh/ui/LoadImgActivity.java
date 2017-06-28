@@ -1,19 +1,21 @@
-package com.pull_more_refresh;
+package com.pull_more_refresh.ui;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ListView;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.pull_more_refresh.R;
+import com.pull_more_refresh.adapter.AdapterImg;
 
-public class LoadPhtActivity extends AppCompatActivity {
+import static com.pull_more_refresh.control.ImageControl.getTestData;
+
+public class LoadImgActivity extends AppCompatActivity {
 
 
     protected ListView mListView;
 
-    protected  AdapterPht mAdapterPht;
+    protected AdapterImg mAdapterImg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,13 +25,10 @@ public class LoadPhtActivity extends AppCompatActivity {
     }
 
     public void initWidget() {
-        List<Phto> list = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            list.add(new Phto());
-        }
-        mAdapterPht = new AdapterPht(this, list);
+
+        mAdapterImg = new AdapterImg(this, getTestData());
         mListView = findView(R.id.listView);
-        mListView.setAdapter(mAdapterPht);
+        mListView.setAdapter(mAdapterImg);
 
     }
 

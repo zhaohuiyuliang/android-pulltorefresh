@@ -4,7 +4,10 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Message;
 
+import com.pull_more_refresh.Constants;
 import com.pull_more_refresh.FileUtils;
+import com.pull_more_refresh.UIHandler;
+import com.pull_more_refresh.model.BeanImp;
 import com.pull_more_refresh.net.ReadWebContent;
 
 import java.io.IOException;
@@ -16,16 +19,18 @@ import java.io.InputStream;
 
 public class ThreadTask implements ReadWebContent.LoadListener {
 
-    private TaskImp mWebTask;
+    private BeanImp mWebTask;
     Runnable task = new Runnable() {
         @Override
         public void run() {
             handleRequest(mWebTask);
         }
     };
+    private UIHandler mUIHandler;
 
-    public ThreadTask(TaskImp task) {
+    public ThreadTask(BeanImp task, UIHandler uiHandler) {
         this.mWebTask = task;
+        this.mUIHandler = uiHandler;
     }
 
     public void start() {
@@ -34,11 +39,13 @@ public class ThreadTask implements ReadWebContent.LoadListener {
 
     @Override
     public void handlerBitmap(Bitmap bitmap) {
-        Message message = Message.obtain();
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("bitmap", bitmap);
-        message.setData(bundle);
-        mWebTask.getUIHandler().sendMessage(message);
+        if (mUIHandler != null) {
+            Message message = Message.obtain();
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(Constants.KEY_BITMAP, bitmap);
+            message.setData(bundle);
+            mUIHandler.sendMessage(message);
+        }
     }
 
     @Override
@@ -59,14 +66,12 @@ public class ThreadTask implements ReadWebContent.LoadListener {
         }
     }
 
-    private void handleRequest(TaskImp task) {
+    private void handleRequest(BeanImp task) {
         switch (task.getTYPE()) {
             case BITMAP: {
                 ReadWebContent.getInstance(this).loadBitmap(mWebTask.getUrl());
                 break;
             }
-
-
         }
 
     }

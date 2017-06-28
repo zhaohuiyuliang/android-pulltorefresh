@@ -1,10 +1,12 @@
-package com.pull_more_refresh;
+package com.pull_more_refresh.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.view.View;
+
+import com.pull_more_refresh.UIHandler;
 
 /**
  * Created by wangliang on 2017/6/27.

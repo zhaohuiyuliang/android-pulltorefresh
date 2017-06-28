@@ -1,6 +1,10 @@
 package com.pull_more_refresh;
 
 import android.app.Application;
+import android.graphics.Bitmap;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by wangliang on 2017/6/28.
@@ -9,6 +13,11 @@ import android.app.Application;
 public class ControlApplication extends Application {
 
     private static ControlApplication instance;
+    private Map<String, Bitmap> mBitmapMap;
+
+    public static ControlApplication getInstance() {
+        return instance;
+    }
 
     @Override
     public void onCreate() {
@@ -16,8 +25,11 @@ public class ControlApplication extends Application {
         instance = this;
     }
 
-    public static ControlApplication getInstance() {
-        return instance;
+    public Map<String, Bitmap> getBitmapMap() {
+        if (mBitmapMap == null) {
+            mBitmapMap = new HashMap<>();
+        }
+        return  mBitmapMap;
     }
 
 }

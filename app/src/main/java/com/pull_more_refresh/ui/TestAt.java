@@ -1,12 +1,13 @@
-package com.pull_more_refresh;
+package com.pull_more_refresh.ui;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Message;
 import android.widget.ImageView;
 
+import com.pull_more_refresh.R;
+import com.pull_more_refresh.model.ImageBean;
 import com.pull_more_refresh.net.URLConstants;
-import com.pull_more_refresh.task.ImageTask;
 import com.pull_more_refresh.task.ThreadTask;
 
 /**
@@ -40,8 +41,7 @@ public class TestAt extends BaseActivity {
 
     @Override
     void loadData() {
-        ImageTask imageTask = new ImageTask(URLConstants.url3, mUIHandler);
-       new ThreadTask(imageTask).start();
-
+        ImageBean imageBean = new ImageBean(URLConstants.url3);
+       new ThreadTask(imageBean, mUIHandler).start();
     }
 }

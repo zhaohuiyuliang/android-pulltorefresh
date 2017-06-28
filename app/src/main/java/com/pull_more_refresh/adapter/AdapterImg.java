@@ -1,11 +1,14 @@
-package com.pull_more_refresh;
+package com.pull_more_refresh.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
+
+import com.pull_more_refresh.R;
+import com.pull_more_refresh.control.ImageControl;
+import com.pull_more_refresh.model.ImageBean;
 
 import java.util.List;
 
@@ -13,23 +16,26 @@ import java.util.List;
  * Created by wangliang on 2017/6/24.
  */
 
-public class AdapterPht extends BaseAdapter {
-    private List<Phto> mPhtoList;
+public class AdapterImg extends AbsBaseAdapter {
+    private List<ImageBean> mImageOjList;
     private Context mContext;
+    private ImageControl mImageControl;
 
-    public AdapterPht(Context mContext, List<Phto> mPhtoList) {
+    public AdapterImg(Context mContext, List<ImageBean> imageOjList) {
         this.mContext = mContext;
-        this.mPhtoList = mPhtoList;
+        this.mImageOjList = imageOjList;
+        mImageControl = new ImageControl();
+
     }
 
     @Override
     public int getCount() {
-        return mPhtoList.size();
+        return mImageOjList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return mPhtoList.get(position);
+        return mImageOjList.get(position);
     }
 
     @Override
@@ -48,11 +54,15 @@ public class AdapterPht extends BaseAdapter {
         } else {
             viewhold = (ViewHold) convertView.getTag();
         }
-        viewhold.img_pht.setImageResource(R.drawable.aaa);
+        ImageBean imageOj = mImageOjList.get(position);
+        viewhold.img_pht.setTag(imageOj.getID());
+        mImageControl.loadImage(imageOj, viewhold.img_pht);
         return convertView;
     }
 
     class ViewHold {
         ImageView img_pht;
     }
+
+
 }

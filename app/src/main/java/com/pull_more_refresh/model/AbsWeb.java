@@ -1,31 +1,19 @@
-package com.pull_more_refresh.task;
-
-import com.pull_more_refresh.UIHandler;
+package com.pull_more_refresh.model;
 
 /**
  * Created by wangliang on 2017/6/27.
  */
 
-public abstract class WebTask {
+public abstract class AbsWeb {
     private static int ID_ = 0;
     private int ID;
     private String url;
-    private UIHandler mUIHandler;
     private TYPE mTYPE;
 
-    public WebTask(String url, TYPE mTYP,UIHandler mUIHandler ) {
+    public AbsWeb(String url, TYPE mTYP) {
         this.url = url;
         this.mTYPE = mTYP;
-        this.mUIHandler = mUIHandler;
         ID = ++ID_;
-    }
-
-    public UIHandler getUIHandler() {
-        return mUIHandler;
-    }
-
-    public void setUIHandler(UIHandler UIHandler) {
-        mUIHandler = UIHandler;
     }
 
     public TYPE getTYPE() {
@@ -53,8 +41,7 @@ public abstract class WebTask {
     }
 
 
-
-    enum TYPE {
+    public enum TYPE {
         BITMAP, FILE_, CONTENT
     }
 }

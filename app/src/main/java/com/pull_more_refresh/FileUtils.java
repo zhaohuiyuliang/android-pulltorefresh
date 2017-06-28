@@ -26,7 +26,7 @@ public class FileUtils {
     }
     public static boolean saveImageToSD(InputStream inputStream, String fileName) throws IOException {
         File sdFile = getSDDataPath();
-        String path = sdFile.getAbsolutePath() + File.separator + "images"  + File.separator + fileName;
+        String path = sdFile.getAbsolutePath() + File.separator + Constants.IMAGE_PATH + File.separator + fileName;
         File file = new File(path);
         if (!file.getParentFile().exists()) {
             file.getParentFile().mkdir();
