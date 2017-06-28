@@ -1,12 +1,8 @@
 package com.pull_more_refresh.task;
 
 import android.graphics.Bitmap;
-import android.os.Bundle;
-import android.os.Message;
 
-import com.pull_more_refresh.Constants;
 import com.pull_more_refresh.FileUtils;
-import com.pull_more_refresh.UIHandler;
 import com.pull_more_refresh.model.BeanImp;
 import com.pull_more_refresh.net.ReadWebContent;
 
@@ -26,11 +22,10 @@ public class ThreadTask implements ReadWebContent.LoadListener {
             handleRequest(mWebTask);
         }
     };
-    private UIHandler mUIHandler;
+    private BitmapListener mBitmapListener;
 
-    public ThreadTask(BeanImp task, UIHandler uiHandler) {
+    public ThreadTask(BeanImp task) {
         this.mWebTask = task;
-        this.mUIHandler = uiHandler;
     }
 
     public void start() {
@@ -39,13 +34,8 @@ public class ThreadTask implements ReadWebContent.LoadListener {
 
     @Override
     public void handlerBitmap(Bitmap bitmap) {
-        if (mUIHandler != null) {
-            Message message = Message.obtain();
-            Bundle bundle = new Bundle();
-            bundle.putParcelable(Constants.KEY_BITMAP, bitmap);
-            bundle.putSerializable(Constants.KEY_BEANIMP, mWebTask);
-            message.setData(bundle);
-            mUIHandler.sendMessage(message);
+        if (mBitmapListener != null) {
+            mBitmapListener.handlerBitmap(bitmap);
         }
     }
 
@@ -75,5 +65,9 @@ public class ThreadTask implements ReadWebContent.LoadListener {
             }
         }
 
+    }
+
+    public interface BitmapListener {
+        void handlerBitmap(Bitmap bitmap, BeanImp beanImp);
     }
 }

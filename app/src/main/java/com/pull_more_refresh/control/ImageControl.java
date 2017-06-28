@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import com.pull_more_refresh.Constants;
 import com.pull_more_refresh.FileUtils;
 import com.pull_more_refresh.adapter.AbsBaseAdapter;
+import com.pull_more_refresh.model.BeanImp;
 import com.pull_more_refresh.model.ImageBean;
 import com.pull_more_refresh.net.URLConstants;
 import com.pull_more_refresh.task.ThreadTask;
@@ -25,7 +26,7 @@ import java.util.Map;
  * Created by wangliang on 2017/6/28.
  */
 
-public class ImageControl extends BaseControl {
+public class ImageControl extends BaseControl implements ThreadTask.BitmapListener {
     private Map<String, Bitmap> bitmapMap;
     private AbsBaseAdapter mAbsBaseAdapter;
 
@@ -42,7 +43,7 @@ public class ImageControl extends BaseControl {
         return imageBeanList;
     }
 
-    public  void loadImage(final ImageBean imageBean, final ImageView img_pht) {
+    public void loadImage(final ImageBean imageBean, final ImageView img_pht) {
         if (mUIHandler == null) {
             mUIHandler = new AbsHandler() {
                 @Override
@@ -52,6 +53,7 @@ public class ImageControl extends BaseControl {
                     if (bundle != null) {
                         Bitmap bitmap = bundle.getParcelable(Constants.KEY_BITMAP);
                         ImageBean imageBean = (ImageBean) bundle.getSerializable(Constants.KEY_BEANIMP);
+
                         bitmapMap.put(String.valueOf(imageBean.getID()), bitmap);
                         mAbsBaseAdapter.notifyDataSetChanged();
                     }
@@ -71,11 +73,11 @@ public class ImageControl extends BaseControl {
             } catch (IOException e) {
                 e.printStackTrace();
                 img_pht.setImageBitmap(null);
-                new ThreadTask(imageBean, mUIHandler).start();
+                new ThreadTask(imageBean).start();
             }
         } else {
             img_pht.setImageBitmap(null);
-            new ThreadTask(imageBean, mUIHandler).start();
+            new ThreadTask(imageBean).start();
         }
     }
 
@@ -98,5 +100,16 @@ public class ImageControl extends BaseControl {
             bitmap = BitmapFactory.decodeStream(inputStream);
         }
         return bitmap;
+    }
+
+    @Override
+    public void handlerBitmap(Bitmap bitmap, BeanImp beanImp) {
+        /**对图片进行压缩*/
+        Message message = Message.obtain();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(Constants.KEY_BITMAP, bitmap);
+        bundle.putSerializable(Constants.KEY_BEANIMP, beanImp);
+        message.setData(bundle);
+        mUIHandler.sendMessage(message);
     }
 }
