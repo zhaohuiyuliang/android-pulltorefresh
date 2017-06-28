@@ -43,6 +43,7 @@ public class ThreadTask implements ReadWebContent.LoadListener {
             Message message = Message.obtain();
             Bundle bundle = new Bundle();
             bundle.putParcelable(Constants.KEY_BITMAP, bitmap);
+            bundle.putSerializable(Constants.KEY_BEANIMP, mWebTask);
             message.setData(bundle);
             mUIHandler.sendMessage(message);
         }

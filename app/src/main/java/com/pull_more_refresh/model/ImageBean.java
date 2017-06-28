@@ -7,10 +7,10 @@ package com.pull_more_refresh.model;
 public class ImageBean extends AbsWeb implements BeanImp {
 
 
+
     public ImageBean(String url) {
         super(url, TYPE.BITMAP);
     }
-
 
     @Override
     public String getFileName() {

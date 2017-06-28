@@ -25,7 +25,7 @@ public class AdapterImg extends AbsBaseAdapter {
     public AdapterImg(Context mContext, List<ImageBean> imageOjList) {
         this.mContext = mContext;
         this.mImageOjList = imageOjList;
-        mImageControl = new ImageControl();
+        mImageControl = new ImageControl(this);
 
     }
 

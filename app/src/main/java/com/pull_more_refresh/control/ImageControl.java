@@ -8,6 +8,7 @@ import android.widget.ImageView;
 
 import com.pull_more_refresh.Constants;
 import com.pull_more_refresh.FileUtils;
+import com.pull_more_refresh.adapter.AbsBaseAdapter;
 import com.pull_more_refresh.model.ImageBean;
 import com.pull_more_refresh.net.URLConstants;
 import com.pull_more_refresh.task.ThreadTask;
@@ -26,9 +27,10 @@ import java.util.Map;
 
 public class ImageControl extends BaseControl {
     private Map<String, Bitmap> bitmapMap;
+    private AbsBaseAdapter mAbsBaseAdapter;
 
-    public ImageControl() {
-
+    public ImageControl(AbsBaseAdapter mAbsBaseAdapter) {
+        this.mAbsBaseAdapter = mAbsBaseAdapter;
     }
 
     public static List<ImageBean> getTestData() {
@@ -40,18 +42,18 @@ public class ImageControl extends BaseControl {
         return imageBeanList;
     }
 
-    public void loadImage(final ImageBean imageBean, final ImageView img_pht) {
+    public  void loadImage(final ImageBean imageBean, final ImageView img_pht) {
         if (mUIHandler == null) {
             mUIHandler = new AbsHandler() {
                 @Override
                 void refreshUI(Message msg) {
                     Bundle bundle = msg.getData();
+
                     if (bundle != null) {
                         Bitmap bitmap = bundle.getParcelable(Constants.KEY_BITMAP);
+                        ImageBean imageBean = (ImageBean) bundle.getSerializable(Constants.KEY_BEANIMP);
                         bitmapMap.put(String.valueOf(imageBean.getID()), bitmap);
-                        if (img_pht.getTag().equals(imageBean.getID())) {
-                            img_pht.setImageBitmap(bitmap);
-                        }
+                        mAbsBaseAdapter.notifyDataSetChanged();
                     }
                 }
             };
@@ -60,28 +62,23 @@ public class ImageControl extends BaseControl {
 
         if (bitmapMap.containsKey(String.valueOf(imageBean.getID()))) {/**检查内存*/
             Bitmap bitmap = bitmapMap.get(String.valueOf(imageBean.getID()));
-            handlerBitmap(bitmap);
-
+            img_pht.setImageBitmap(bitmap);
         } else if (isSaveImageInSD(imageBean.getFileName())) {/**检查SD卡*/
             try {
                 Bitmap bitmap = getBitmapFromSD(imageBean.getFileName());
-                handlerBitmap(bitmap);
+                img_pht.setImageBitmap(bitmap);
+                bitmapMap.put(String.valueOf(imageBean.getID()), bitmap);
             } catch (IOException e) {
                 e.printStackTrace();
+                img_pht.setImageBitmap(null);
                 new ThreadTask(imageBean, mUIHandler).start();
             }
         } else {
+            img_pht.setImageBitmap(null);
             new ThreadTask(imageBean, mUIHandler).start();
         }
     }
 
-    public void handlerBitmap(Bitmap bitmap) {
-        Message message = Message.obtain();
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(Constants.KEY_BITMAP, bitmap);
-        message.setData(bundle);
-        mUIHandler.sendMessage(message);
-    }
 
     private boolean isSaveImageInSD(String fileName) {
         String filePath = FileUtils.getSDDataPath() + File.separator + Constants.IMAGE_PATH + File.separator + fileName;
