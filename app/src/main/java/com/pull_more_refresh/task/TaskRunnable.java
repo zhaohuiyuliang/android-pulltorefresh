@@ -1,8 +1,5 @@
 package com.pull_more_refresh.task;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
 import com.pull_more_refresh.FileUtils;
 import com.pull_more_refresh.model.BeanImp;
 import com.pull_more_refresh.net.ReadWebContent;
@@ -31,9 +28,6 @@ public class TaskRunnable implements Runnable, ReadWebContent.LoadListener {
 
     @Override
     public void handlerInputStream(InputStream inputStream) {
-
-        Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-
         try {
             FileUtils.saveImageToSD(inputStream, mWebTask.getFileName());
             if (mFileSaveListener != null) {

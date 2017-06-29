@@ -1,7 +1,5 @@
 package com.pull_more_refresh.net;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -23,24 +21,7 @@ public class ReadWebContent {
     }
 
     public void loadBitmap(String url) {
-        InputStream input = loadInputStream(url);
-
-        ByteArrayOutputStream bysStream = new ByteArrayOutputStream();
-
-        byte[] buffer = new byte[1024];
-        int len;
-        try {
-            while ((len = input.read(buffer)) > -1) {
-                bysStream.write(buffer, 0, len);
-            }
-            bysStream.flush();
-            input.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (mLoadListener != null) {
-            mLoadListener.handlerInputStream(new ByteArrayInputStream(bysStream.toByteArray()));
-        }
+        loadInputStream(url);
     }
 
     private URLConnection getURLConnection(String url) {
@@ -76,7 +57,13 @@ public class ReadWebContent {
         if (local != null) {
             try {
                 inputStream = local.getInputStream();
+                if (mLoadListener != null) {
+                    mLoadListener.handlerInputStream(inputStream);
+                }
+                inputStream.close();
             } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
 
             }
         }
