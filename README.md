@@ -92,7 +92,7 @@ Repository at <https://github.com/zhaohuiyuliang/android-pulltorefresh>.
         }
         return bitmap;
     }
-    ```
+```
     
 ###  Bitmap压缩到2的幂的规格
 
