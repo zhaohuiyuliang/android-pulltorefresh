@@ -64,7 +64,8 @@ Repository at <https://github.com/zhaohuiyuliang/android-pulltorefresh>.
     
 ```
 
-###  Bitmap压缩到原来的几分之1
+
+### Bitmap压缩到原来的几分之1
 
 
 压缩到1/4大小，压缩过程每隔3个像素读取一个像素。图片大小及尺寸大小也变为原来1/4.
@@ -92,11 +93,17 @@ Repository at <https://github.com/zhaohuiyuliang/android-pulltorefresh>.
         return bitmap;
     }
     ```
+    
 ###  Bitmap压缩到2的幂的规格
+
 
 ![scaled_theory](https://github.com/zhaohuiyuliang/android-pulltorefresh/blob/master/raw/master/scaled_theory.png)
 
+
+
 ![sample_scaled](https://github.com/zhaohuiyuliang/android-pulltorefresh/blob/master/raw/master/sample_scaled.png)
+
+
 
 ### 使用线程池ThreadPoolExecutor
 
