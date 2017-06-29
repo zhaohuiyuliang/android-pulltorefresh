@@ -51,12 +51,11 @@ public class ReadWebContent {
 
     }
 
-    private InputStream loadInputStream(String url) {
+    private void loadInputStream(String url) {
         URLConnection local = getURLConnection(url);
-        InputStream inputStream = null;
         if (local != null) {
             try {
-                inputStream = local.getInputStream();
+                InputStream inputStream = local.getInputStream();
                 if (mLoadListener != null) {
                     mLoadListener.handlerInputStream(inputStream);
                 }
@@ -67,7 +66,6 @@ public class ReadWebContent {
 
             }
         }
-        return inputStream;
     }
 
     public interface LoadListener {
