@@ -90,6 +90,7 @@ Repository at <https://github.com/zhaohuiyuliang/android-pulltorefresh>.
     }
     ```
 ###  Bitmap压缩到2的幂的规格
+
 ![scaled_theory](https://github.com/zhaohuiyuliang/android-pulltorefresh/blob/master/raw/master/scaled_theory.png)
 
 ![sample_scaled](https://github.com/zhaohuiyuliang/android-pulltorefresh/blob/master/raw/master/sample_scaled.png)
