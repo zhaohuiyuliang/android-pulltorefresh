@@ -1,6 +1,6 @@
 # 下拉刷新
 
-![下拉刷新](https://github.com/zhaohuiyuliang/android-pulltorefresh/blob/master/raw/master/pull_refresh.png?imageView/2/w/100/q/200)
+![下拉刷新](https://github.com/zhaohuiyuliang/android-pulltorefresh/blob/master/raw/master/pull_refresh.png)
 
 # 上拉加载更多
 ![下拉加载更多](https://github.com/zhaohuiyuliang/android-pulltorefresh/blob/master/raw/master/more_refresh.png)
@@ -66,7 +66,9 @@ Repository at <https://github.com/zhaohuiyuliang/android-pulltorefresh>.
 
 ###  Bitmap压缩显示
 
+
 压缩到1/4大小，压缩过程每隔3个像素读取一个像素。图片大小及尺寸大小也变为原来1/4.
+![sample](https://github.com/zhaohuiyuliang/android-pulltorefresh/blob/master/raw/master/in_sample_size.png)
 ```java
     /**
      * 得到压缩后的位图
