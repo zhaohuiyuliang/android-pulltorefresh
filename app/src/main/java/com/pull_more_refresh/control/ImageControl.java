@@ -2,11 +2,13 @@ package com.pull_more_refresh.control;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.os.Message;
 import android.widget.ImageView;
 
 import com.pull_more_refresh.Constants;
+import com.pull_more_refresh.ControlApplication;
 import com.pull_more_refresh.FileUtils;
 import com.pull_more_refresh.adapter.AbsBaseAdapter;
 import com.pull_more_refresh.model.BeanImp;
@@ -141,10 +143,50 @@ public class ImageControl extends BaseControl implements TaskRunnable.FileSaveLi
         String filePath = FileUtils.imagesPath() + beanImp.getFileName();
         File file = new File(filePath);
         if (file.exists()) {
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inSampleSize = 4;
-            bitmap = BitmapFactory.decodeFile(filePath, options);
+            bitmap = getScaled(filePath);
+//            bitmap = getZoomBitmap(bitmap);
         }
         return bitmap;
     }
+
+    private Bitmap getScaled(String filePath) {
+        Bitmap bitmap;
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 4;
+        bitmap = BitmapFactory.decodeFile(filePath, options);
+        return bitmap;
+    }
+
+    /**
+     * 图片剪切
+     *
+     * @param paramBitmap
+     * @return
+     */
+    private Bitmap getZoomBitmap(Bitmap paramBitmap) {
+        int screenW = ControlApplication.getInstance().getScreenWidth();
+
+        int s = (screenW * 2 / 3 - 20);
+        Bitmap localBitmap = null;
+        try {
+            int width = paramBitmap.getWidth();
+            int height = paramBitmap.getHeight();
+            // 图片小于xx，等比例拉伸再剪切
+            if (width < s || height < 160) {
+                float scaleWidth = ((float) s) / width;
+                float scaleHeight = ((float) 160) / height;
+                float scale = scaleWidth > scaleHeight ? scaleWidth : scaleHeight;
+                Matrix matrix = new Matrix();
+                matrix.postScale(scale, scale);
+                Bitmap newbm = Bitmap.createBitmap(paramBitmap, 0, 0, width, height, matrix, true);
+                localBitmap = Bitmap.createBitmap(newbm, 0, 0, s, 160);
+            } else {
+                localBitmap = Bitmap.createBitmap(paramBitmap, 0, 0, s, 160);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return localBitmap;
+    }
+
 }

@@ -7,4 +7,5 @@
 
     <color name="list_divider_color">#DADADA</color>
     <color name="white">#FFFFFF</color>
+    <color name="transparent">#000000</color>
 </resources>

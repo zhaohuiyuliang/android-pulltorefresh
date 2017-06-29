@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="none"
-            android:dividerHeight="1px"/>
+            android:dividerHeight="3px"/>
     </com.pull_more_refresh.customview.SuperRefreshLayout>
 
 </RelativeLayout>
