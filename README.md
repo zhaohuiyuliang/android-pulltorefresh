@@ -29,31 +29,72 @@ Repository at <https://github.com/zhaohuiyuliang/android-pulltorefresh>.
     </com.pull_more_refresh.customview.SuperRefreshLayout>
 ```
 
-### Activity
+### 加载并保存图片
 
 ``` java
-// Set a listener to be invoked when the list should be refreshed.
-((PullToRefreshListView) getListView()).setOnRefreshListener(new OnRefreshListener() {
-    @Override
-    public void onRefresh() {
-        // Do work to refresh the list here.
-        new GetDataTask().execute();
-    }
-});
 
-private class GetDataTask extends AsyncTask<Void, Void, String[]> {
-    ...
-    @Override
-    protected void onPostExecute(String[] result) {
-        mListItems.addFirst("Added after refresh...");
-        // Call onRefreshComplete when the list has been refreshed.
-        ((PullToRefreshListView) getListView()).onRefreshComplete();
-        super.onPostExecute(result);
+    private void loadInputStream(String url) {
+        URLConnection local = getURLConnection(url);
+        if (local != null) {
+            try {
+                InputStream inputStream = local.getInputStream();
+                if (mLoadListener != null) {
+                    mLoadListener.handlerInputStream(inputStream);
+                }
+                inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+
+            }
+        }
     }
-}
+    
+    @Override
+    public void handlerInputStream(InputStream inputStream) {
+        try {
+            FileUtils.saveImageToSD(inputStream, mWebTask.getFileName());
+            if (mFileSaveListener != null) {
+                mFileSaveListener.handlerFileSaveComplete(mWebTask);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
 ```
 
-### Last Updated
+###  Bitmap压缩显示
+
+压缩到1/4大小，压缩过程每隔3个像素读取一个像素。图片大小及尺寸大小也变为原来1/4.
+```java
+    /**
+     * 得到压缩后的位图
+     *
+     * @param beanImp
+     * @return
+     */
+    private Bitmap getCompressBitmap(BeanImp beanImp) throws IOException {
+        Bitmap bitmap = null;
+        String filePath = FileUtils.imagesPath() + beanImp.getFileName();
+        File file = new File(filePath);
+        if (file.exists()) {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = 4;
+            bitmap = BitmapFactory.decodeFile(filePath, options);
+        }
+        return bitmap;
+    }
+    ```
+
+
+### 使用线程池ThreadPoolExecutor
+
+避免无限制的创建线程消耗资源
+
+### 后进先出原则
+
+### 
 
 It's possible to add a last updated time using the method `setLastUpdated`
 and `onRefreshComplete`. The text provided to these methods will be set below
