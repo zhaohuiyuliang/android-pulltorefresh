@@ -17,13 +17,14 @@ public class FileUtils {
 
     public static boolean saveImageToSD(Bitmap bitmap, String fileName) throws IOException {
         File sdFile = getSDDataPath();
-        String path = sdFile.getAbsolutePath() + File.separator + "images"  + File.separator + fileName;
+        String path = sdFile.getAbsolutePath() + File.separator + "images" + File.separator + fileName;
         File file = new File(path);
         if (!file.getParentFile().exists()) {
             file.getParentFile().mkdir();
         }
         return true;
     }
+
     public static synchronized boolean saveImageToSD(InputStream inputStream, String fileName) throws IOException {
         File sdFile = getSDDataPath();
         String path = sdFile.getAbsolutePath() + File.separator + Constants.IMAGE_PATH + File.separator + fileName;
@@ -45,5 +46,10 @@ public class FileUtils {
     public static File getSDDataPath() {
         File sdFile = ControlApplication.getInstance().getExternalFilesDir(null);
         return sdFile;
+    }
+
+    public static String imagesPath() {
+        String path = getSDDataPath() + Constants.IMAGES_PATH;
+        return path;
     }
 }

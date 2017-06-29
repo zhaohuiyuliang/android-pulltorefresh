@@ -1,6 +1,7 @@
 package com.pull_more_refresh.task;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import com.pull_more_refresh.FileUtils;
 import com.pull_more_refresh.model.BeanImp;
@@ -13,14 +14,14 @@ import java.io.InputStream;
  * Created by wangliang on 2017/6/28.
  */
 
-public class TaskR implements Runnable, ReadWebContent.LoadListener {
-    private BitmapListener mBitmapListener;
+public class TaskRunnable implements Runnable, ReadWebContent.LoadListener {
+    private FileSaveListener mFileSaveListener;
 
     private BeanImp mWebTask;
 
-    public TaskR(BeanImp beanImp, BitmapListener bitmapListener) {
+    public TaskRunnable(BeanImp beanImp, FileSaveListener fileSaveListener) {
         this.mWebTask = beanImp;
-        mBitmapListener = bitmapListener;
+        mFileSaveListener = fileSaveListener;
     }
 
     @Override
@@ -29,26 +30,15 @@ public class TaskR implements Runnable, ReadWebContent.LoadListener {
     }
 
     @Override
-    public void handlerBitmap(Bitmap bitmap) {
-        if (mBitmapListener != null) {
-            mBitmapListener.handlerBitmap(bitmap, mWebTask);
-        }
-    }
+    public void handlerInputStream(InputStream inputStream) {
 
-    @Override
-    public void saveFile(Bitmap bitmap) {
-//        try {
-//            FileUtils.saveImageToSD(bitmap, mWebTask.getFileName());
-//        } catch (IOException e) {
-//
-//        }
-    }
+        Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
 
-
-    @Override
-    public void saveFile(InputStream inputStream) {
         try {
             FileUtils.saveImageToSD(inputStream, mWebTask.getFileName());
+            if (mFileSaveListener != null) {
+                mFileSaveListener.handlerFileSaveComplete(mWebTask);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -61,10 +51,9 @@ public class TaskR implements Runnable, ReadWebContent.LoadListener {
                 break;
             }
         }
-
     }
 
-    public interface BitmapListener {
-        void handlerBitmap(Bitmap bitmap, BeanImp beanImp);
+    public interface FileSaveListener {
+        void handlerFileSaveComplete(BeanImp beanImp);
     }
 }

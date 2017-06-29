@@ -1,8 +1,5 @@
 package com.pull_more_refresh.net;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -37,14 +34,12 @@ public class ReadWebContent {
                 bysStream.write(buffer, 0, len);
             }
             bysStream.flush();
+            input.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Bitmap bitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(bysStream.toByteArray()));
         if (mLoadListener != null) {
-            mLoadListener.handlerBitmap(bitmap);
-            mLoadListener.saveFile(bitmap);
-            mLoadListener.saveFile(new ByteArrayInputStream(bysStream.toByteArray()));
+            mLoadListener.handlerInputStream(new ByteArrayInputStream(bysStream.toByteArray()));
         }
     }
 
@@ -89,10 +84,6 @@ public class ReadWebContent {
     }
 
     public interface LoadListener {
-        void handlerBitmap(Bitmap bitmap);
-
-        void saveFile(Bitmap bitmap);
-
-        void saveFile(InputStream inputStream);
+        void handlerInputStream(InputStream inputStream);
     }
 }
