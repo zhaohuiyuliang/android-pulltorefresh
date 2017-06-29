@@ -1,6 +1,6 @@
 # 下拉刷新
 
-![下拉刷新](https://github.com/zhaohuiyuliang/android-pulltorefresh/blob/master/raw/master/pull_refresh.png?=200x300)
+![下拉刷新](https://github.com/zhaohuiyuliang/android-pulltorefresh/blob/master/raw/master/pull_refresh.png?=100x200)
 
 # 上拉加载更多
 ![下拉加载更多](https://github.com/zhaohuiyuliang/android-pulltorefresh/blob/master/raw/master/more_refresh.png)
