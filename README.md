@@ -105,39 +105,114 @@ Repository at <https://github.com/zhaohuiyuliang/android-pulltorefresh>.
 
 
 
+
+
+### 创建后进先出队列存储任务
+
+```java
+public class LIFOTask extends FutureTask<Object> implements  Comparable<LIFOTask> {
+
+    private static int counter;
+
+
+    private int priority;
+
+    public LIFOTask(Runnable  runnable) {
+        super(runnable, new Object());
+        priority = counter++;
+
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    @Override
+    public int compareTo(@NonNull LIFOTask lifoTask) {
+        return priority > lifoTask.getPriority() ? -1 : 1;
+    }
+    
+}
+
+
+
+```
+
 ### 使用线程池ThreadPoolExecutor
 
+
 避免无限制的创建线程消耗资源
+```java
 
-### 后进先出原则
+    private BlockingQueue<Runnable> optToRun =
+            new PriorityBlockingQueue<>(64,
+                    new Comparator<Runnable>() {
+                        @Override
+                        public int compare(Runnable runnable, Runnable t1) {
+                            if (runnable instanceof LIFOTask && t1 instanceof LIFOTask) {
+                                LIFOTask l1 = (LIFOTask) runnable;
+                                LIFOTask l2 = (LIFOTask) t1;
+                                return l1.compareTo(l2);
+                            }
+                            return 0;
+                        }
 
-### 
+                    });
 
-It's possible to add a last updated time using the method `setLastUpdated`
-and `onRefreshComplete`. The text provided to these methods will be set below
-the Release to refresh text. Note that the time representation is not validated
-replaces the previous text, which means that it's possible and recommended to
-add a text similar to "Last Update: 15:23". This might be changed in future
-versions.
+    private ThreadPoolExecutor mExecutor;
 
-## 1.5 Support
+    public LIFOThreadPoolProcessor(int threadCount) {
+        mExecutor = new ThreadPoolExecutor(threadCount, threadCount, 0, TimeUnit.SECONDS, optToRun);
+    }
+```
 
-To use the widget on 1.5 the necessary drawables needs to be copied to that
-projects drawable folder. The drawables needed by the widget can be found in
-the drawable-hdpi folder in the library project.
+### 图片保存到SD上
 
-## Contributors
+```java
+    public static synchronized boolean saveImageToSD(InputStream inputStream, String fileName) throws IOException {
+        File sdFile = getSDDataPath();
+        String path = sdFile.getAbsolutePath() + File.separator + Constants.IMAGE_PATH + File.separator + fileName;
+        File file = new File(path);
+        if (!file.getParentFile().exists()) {
+            file.getParentFile().mkdir();
+        }
+        BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file));
+        byte[] bytes = new byte[1024];
+        int len;
+        InputStream input = inputStream;
+        while ((len = input.read(bytes)) != -1) {
+            outputStream.write(bytes, 0, len);
+        }
+        outputStream.flush();
+        return true;
+    }
 
-* [Jason Knight](http://www.synthable.com/) - <https://github.com/synthable>
-* [Eddie Ringle](http://eddieringle.com/) - <https://github.com/eddieringle>
-* [Christof Dorner](http://chdorner.com) - <https://github.com/chdorner>
-* [Olof Brickarp](http://www.yay.se) - <https://github.com/coolof>
-* [James Smith](http://loopj.com/) - <https://github.com/loopj>
-* [Alex Volovoy](http://bytesharp.com/) - <https://github.com/avolovoy>
-* Bo Maryniuk
-* [kidfolk](https://github.com/kidfolk)
-* [Tim Mahoney](https://github.com/timahoney)
-* [Richard Guest](https://github.com/quiffman)
+```
+
+### 以Map<String, Bitmap>方式内存缓存Bitmap
+
+```java
+
+        if (bitmapMap.containsKey(String.valueOf(imageBean.getID()))) {/**检查内存*/
+            Bitmap bitmap = bitmapMap.get(String.valueOf(imageBean.getID()));
+            img_pht.setImageBitmap(bitmap);
+        } else if (isSaveImageInSD(imageBean.getFileName())) {/**检查SD卡*/
+            try {
+                Bitmap bitmap = getCompressBitmap(imageBean);
+                img_pht.setImageBitmap(bitmap);
+                bitmapMap.put(String.valueOf(imageBean.getID()), bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+                img_pht.setImageBitmap(null);
+                mPoolProcessor.submitTask(new LIFOTask(new TaskRunnable(imageBean, this)));
+            }
+        } else {
+            img_pht.setImageBitmap(null);
+            mPoolProcessor.submitTask(new LIFOTask(new TaskRunnable(imageBean, this)));
+        }
+
+```
+
 
 ## Are you using this widget?
 
