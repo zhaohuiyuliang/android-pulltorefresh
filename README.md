@@ -214,11 +214,6 @@ public class LIFOTask extends FutureTask<Object> implements  Comparable<LIFOTask
 ```
 
 
-## Are you using this widget?
-
-If you are using this widget please feel free to add your app to the
-[wiki](https://github.com/johannilsson/android-pulltorefresh/wiki/Apps).
-
 ## License
 Copyright (c) 2011 [Johan Nilsson](http://markupartist.com)
 
