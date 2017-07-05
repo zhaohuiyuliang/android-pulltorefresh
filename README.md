@@ -107,7 +107,9 @@ Repository at <https://github.com/zhaohuiyuliang/android-pulltorefresh>.
 
 
 
-### 创建后进先出队列存储任务
+### 使用栈存储任务对象
+
+栈的特点，后进先出
 
 ```java
 public class LIFOTask extends FutureTask<Object> implements  Comparable<LIFOTask> {
