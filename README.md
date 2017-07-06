@@ -107,7 +107,7 @@ Repository at <https://github.com/zhaohuiyuliang/android-pulltorefresh>.
 
 
 
-### 使用栈存储任务对象
+### 以后进先出方式加载图片
 
 栈的特点，后进先出
 
@@ -191,7 +191,11 @@ public class LIFOTask extends FutureTask<Object> implements  Comparable<LIFOTask
 
 ```
 
-### 以Map<String, Bitmap>方式内存缓存Bitmap
+### LruCache缓存图片
+
+缓存经历：以Map<String, Bitmap>方式内存缓存Bitmap，不能很好的释放内存
+
+LruCache，设置缓存大小，释放内存由内部逻辑处理。
 
 ```java
 
