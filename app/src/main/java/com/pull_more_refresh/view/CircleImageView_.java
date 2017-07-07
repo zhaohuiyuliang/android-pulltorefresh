@@ -1,4 +1,4 @@
-package com.pull_more_refresh.customview;
+package com.pull_more_refresh.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -13,6 +13,7 @@ import android.view.animation.Animation;
 import android.widget.ImageView;
 
 /**
+ * 圆形ImageView
  * Created by wangliang on 2017/6/24.
  */
 
@@ -64,6 +65,7 @@ public class CircleImageView_ extends ImageView {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         if (!elevationSupported()) {
+            /**调用该函数，告诉父控件该视图需要多大尺寸的地方*/
             setMeasuredDimension(getMeasuredWidth() + mShadowRadius*2, getMeasuredHeight()
                     + mShadowRadius*2);
         }

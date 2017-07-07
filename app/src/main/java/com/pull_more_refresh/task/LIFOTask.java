@@ -30,6 +30,4 @@ public class LIFOTask extends FutureTask<Object> implements  Comparable<LIFOTask
         return priority > lifoTask.getPriority() ? -1 : 1;
     }
 
-
-
 }

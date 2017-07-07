@@ -1,4 +1,4 @@
-package com.pull_more_refresh.customview;
+package com.pull_more_refresh.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -8,7 +8,7 @@ import android.view.ViewConfiguration;
 import android.widget.AbsListView;
 import android.widget.ListView;
 
-import static com.pull_more_refresh.customview.PullListView.TYPE_MORE.TYPE_NO_MORE;
+import static com.pull_more_refresh.view.PullListView.TYPE_MORE.TYPE_NO_MORE;
 
 /**
  * 在下拉刷新的基础上增加上拉加载更多功能
@@ -46,7 +46,7 @@ public class SuperRefreshLayout extends PullRefreshLayout implements AbsListView
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        if (isInBottom()/*滚动到最底部*/) {
+        if (isInBottom()/**滑动到最底部*/) {
             if (canLoad() && (mListener != null)) {
                 mListener.onLoadMore();
             } else {
@@ -100,10 +100,10 @@ public class SuperRefreshLayout extends PullRefreshLayout implements AbsListView
 
     /**
      * 事件分发函数
-     * MotionEvent进入SuperRefreshLayout布局中从这里开发分开
+     * MotionEvent从这里开始分发
      *
-     * @param event 分发的事件对象
-     * @return true 事件需要向下分发; false 事件不需要分发返回上一次;
+     * @param event 事件对象
+     * @return true 事件继续分发; false 事件停止分发;
      */
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {

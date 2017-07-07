@@ -1,4 +1,4 @@
-package com.pull_more_refresh.customview;
+package com.pull_more_refresh.view;
 
 import android.content.Context;
 import android.util.AttributeSet;

@@ -1,4 +1,4 @@
-package com.pull_more_refresh.customview;
+package com.pull_more_refresh.view;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -27,6 +27,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 
 /**
+ *
  * Created by wangliang on 2017/6/24.
  */
 
@@ -64,7 +65,7 @@ public class MaterialProgressDrawable_  extends Drawable implements Animatable {
     /** The number of points in the progress "star". */
     private static final float NUM_POINTS = 5f;
     /** The list of animators operating on this drawable. */
-    private final ArrayList<Animation> mAnimators = new ArrayList<Animation>();
+    private final ArrayList<Animation> mAnimators = new ArrayList<>();
 
     /** The indicator ring, used to manage animation state. */
     private final Ring mRing;

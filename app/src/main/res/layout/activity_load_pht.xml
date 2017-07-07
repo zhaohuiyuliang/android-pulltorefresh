@@ -4,17 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.pull_more_refresh.customview.SuperRefreshLayout
+    <com.pull_more_refresh.view.SuperRefreshLayout
         android:id="@+id/superRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.pull_more_refresh.customview.PullListView
+        <com.pull_more_refresh.view.PullListView
             android:id="@+id/listView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="none"
             android:dividerHeight="3px"/>
-    </com.pull_more_refresh.customview.SuperRefreshLayout>
+    </com.pull_more_refresh.view.SuperRefreshLayout>
 
 </RelativeLayout>

@@ -1,4 +1,4 @@
-package com.pull_more_refresh.customview;
+package com.pull_more_refresh.view;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -32,7 +32,9 @@ public class PullRefreshLayout extends ViewGroup {
 
     private static final int MAX_ALPHA = 255;
     private static final int STARTING_PROGRESS_ALPHA = (int) (.3f * MAX_ALPHA);
-
+    /**
+     * 旋转视图的直径
+     */
     private static final int CIRCLE_DIAMETER = 40;
     private static final int CIRCLE_DIAMETER_LARGE = 56;
 
@@ -62,9 +64,15 @@ public class PullRefreshLayout extends ViewGroup {
     private final DecelerateInterpolator mDecelerateInterpolator;
     protected int mFrom;
     protected int mOriginalOffsetTop;
-    private View mTarget; // the target of the gesture
+    private View mTarget;
+    /**
+     * 这个子视图就是我们的ListView
+     */
     private OnRefreshListener mListener;
     private boolean mRefreshing = false;
+    /**
+     * 滑动距离小于该数值(系统默认的最小距离为8像素)，忽略
+     */
     private int mTouchSlop;
     private float mTotalDragDistance = -1;
     private int mMediumAnimationDuration;
@@ -73,6 +81,9 @@ public class PullRefreshLayout extends ViewGroup {
     private boolean mOriginalOffsetCalculated = false;
     private float mInitialMotionY;
     private float mInitialDownY;
+    /**
+     * 旋转视图是否出现的标识，true/false
+     */
     private boolean mIsBeingDragged;
     private int mActivePointerId = INVALID_POINTER;
     // Whether this item is scaled up rather than clipped
@@ -168,11 +179,12 @@ public class PullRefreshLayout extends ViewGroup {
      */
     public PullRefreshLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
-
+        /**
+         * 可检测到的最小距离为8像素
+         */
         mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
 
-        mMediumAnimationDuration = getResources().getInteger(
-                android.R.integer.config_mediumAnimTime);
+        mMediumAnimationDuration = getResources().getInteger(android.R.integer.config_mediumAnimTime);
 
         setWillNotDraw(false);
         mDecelerateInterpolator = new DecelerateInterpolator(DECELERATE_INTERPOLATION_FACTOR);
@@ -182,6 +194,7 @@ public class PullRefreshLayout extends ViewGroup {
         a.recycle();
 
         final DisplayMetrics metrics = getResources().getDisplayMetrics();
+        /**由于不同屏幕像素大小不一样，会导致视图大小显示有误差。像素乘以屏幕像素密度适配各种屏幕*/
         mCircleWidth = (int) (CIRCLE_DIAMETER * metrics.density);
         mCircleHeight = (int) (CIRCLE_DIAMETER * metrics.density);
 
@@ -486,6 +499,9 @@ public class PullRefreshLayout extends ViewGroup {
         }
     }
 
+    /**
+     * 获取ListView
+     */
     private void ensureTarget() {
         // Don't bother getting the parent height if the parent hasn't been laid
         // out yet.
@@ -522,6 +538,7 @@ public class PullRefreshLayout extends ViewGroup {
         if (mTarget == null) {
             return;
         }
+        /**设置ListView视图的坐标*/
         final View child = mTarget;
         final int childLeft = getPaddingLeft();
         final int childTop = getPaddingTop();
@@ -530,6 +547,7 @@ public class PullRefreshLayout extends ViewGroup {
         child.layout(childLeft, childTop, childLeft + childWidth, childTop + childHeight);
         int circleWidth = mCircleView.getMeasuredWidth();
         int circleHeight = mCircleView.getMeasuredHeight();
+        /**设置子视图的坐标*/
         mCircleView.layout((width / 2 - circleWidth / 2), mCurrentTargetOffsetTop,
                 (width / 2 + circleWidth / 2), mCurrentTargetOffsetTop + circleHeight);
     }
@@ -543,10 +561,17 @@ public class PullRefreshLayout extends ViewGroup {
         if (mTarget == null) {
             return;
         }
+        /**设置ListView的大小*/
         mTarget.measure(MeasureSpec.makeMeasureSpec(
                 getMeasuredWidth() - getPaddingLeft() - getPaddingRight(),
                 MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(
                 getMeasuredHeight() - getPaddingTop() - getPaddingBottom(), MeasureSpec.EXACTLY));
+        /**
+         *
+         * 设置旋转视图的大小
+         * CircleImageView_调用getMeasuredWidth()函数获取到设置的大小
+         * View最终尺寸由setMeasuredDimension()函数决定，如果没有明确调用，则系统调用
+         */
         mCircleView.measure(MeasureSpec.makeMeasureSpec(mCircleWidth, MeasureSpec.EXACTLY),
                 MeasureSpec.makeMeasureSpec(mCircleHeight, MeasureSpec.EXACTLY));
         if (!mUsingCustomStart && !mOriginalOffsetCalculated) {
@@ -554,7 +579,7 @@ public class PullRefreshLayout extends ViewGroup {
             mCurrentTargetOffsetTop = mOriginalOffsetTop = -mCircleView.getMeasuredHeight();
         }
         mCircleViewIndex = -1;
-        // Get the index of the circleview.
+        // Get the index of the CircleView.
         for (int index = 0; index < getChildCount(); index++) {
             if (getChildAt(index) == mCircleView) {
                 mCircleViewIndex = index;
@@ -595,8 +620,10 @@ public class PullRefreshLayout extends ViewGroup {
 
     /**
      * 事件拦截函数
-     * @param ev
-     * @return
+     *
+     * @param ev 事件对象
+     * @return true:拦截，自己处理；
+     * false：继续分发。
      */
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
@@ -637,9 +664,12 @@ public class PullRefreshLayout extends ViewGroup {
                     return false;
                 }
                 final float yDiff = y - mInitialDownY;
+                /**
+                 * 滑动距离大于mTouchSlop
+                 */
                 if (yDiff > mTouchSlop && !mIsBeingDragged) {
                     mInitialMotionY = mInitialDownY + mTouchSlop;
-                    /**表示消费了Move事件，MotionEvent事件不再传递*/
+                    /**设置为true：拦截MotionEvent事件，表示我要消费事件*/
                     mIsBeingDragged = true;
                     mProgress.setAlpha(STARTING_PROGRESS_ALPHA);
                 }
@@ -677,6 +707,13 @@ public class PullRefreshLayout extends ViewGroup {
         return animation != null && animation.hasStarted() && !animation.hasEnded();
     }
 
+    /**
+     * 事件处理函数
+     *
+     * @param ev 事件对象
+     * @return true: 事件处理完毕;
+     * false: 继续处理后续事件
+     */
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         final int action = MotionEventCompat.getActionMasked(ev);
@@ -691,11 +728,11 @@ public class PullRefreshLayout extends ViewGroup {
         }
 
         switch (action) {
-            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_DOWN: {
                 mActivePointerId = MotionEventCompat.getPointerId(ev, 0);
                 mIsBeingDragged = false;
                 break;
-
+            }
             case MotionEvent.ACTION_MOVE: {
                 final int pointerIndex = MotionEventCompat.findPointerIndex(ev, mActivePointerId);
                 if (pointerIndex < 0) {
@@ -714,16 +751,12 @@ public class PullRefreshLayout extends ViewGroup {
                     float dragPercent = Math.min(1f, Math.abs(originalDragPercent));
                     float adjustedPercent = (float) Math.max(dragPercent - .4, 0) * 5 / 3;
                     float extraOS = Math.abs(overScrollTop) - mTotalDragDistance;
-                    float slingshotDist = mUsingCustomStart ? mSpinnerFinalOffset
-                            - mOriginalOffsetTop : mSpinnerFinalOffset;
-                    float tensionSlingshotPercent = Math.max(0,
-                            Math.min(extraOS, slingshotDist * 2) / slingshotDist);
-                    float tensionPercent = (float) ((tensionSlingshotPercent / 4) - Math.pow(
-                            (tensionSlingshotPercent / 4), 2)) * 2f;
+                    float slingshotDist = mUsingCustomStart ? mSpinnerFinalOffset - mOriginalOffsetTop : mSpinnerFinalOffset;
+                    float tensionSlingshotPercent = Math.max(0, Math.min(extraOS, slingshotDist * 2) / slingshotDist);
+                    float tensionPercent = (float) ((tensionSlingshotPercent / 4) - Math.pow((tensionSlingshotPercent / 4), 2)) * 2f;
                     float extraMove = (slingshotDist) * tensionPercent * 2;
 
-                    int targetY = mOriginalOffsetTop
-                            + (int) ((slingshotDist * dragPercent) + extraMove);
+                    int targetY = mOriginalOffsetTop + (int) ((slingshotDist * dragPercent) + extraMove);
                     // where 1.0f is a full circle
                     if (mCircleView.getVisibility() != View.VISIBLE) {
                         mCircleView.setVisibility(View.VISIBLE);
@@ -753,8 +786,7 @@ public class PullRefreshLayout extends ViewGroup {
                     }
                     float rotation = (-0.25f + .4f * adjustedPercent + tensionPercent * 2) * .5f;
                     mProgress.setProgressRotation(rotation);
-                    setTargetOffsetTopAndBottom(targetY - mCurrentTargetOffsetTop,
-                            true /* requires update */);
+                    setTargetOffsetTopAndBottom(targetY - mCurrentTargetOffsetTop, true /* requires update */);
                 }
                 break;
             }
@@ -764,9 +796,10 @@ public class PullRefreshLayout extends ViewGroup {
                 break;
             }
 
-            case MotionEventCompat.ACTION_POINTER_UP:
+            case MotionEventCompat.ACTION_POINTER_UP: {
                 onSecondaryPointerUp(ev);
                 break;
+            }
 
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL: {
@@ -848,8 +881,7 @@ public class PullRefreshLayout extends ViewGroup {
     }
 
     private void moveToStart(float interpolatedTime) {
-        int targetTop = 0;
-        targetTop = (mFrom + (int) ((mOriginalOffsetTop - mFrom) * interpolatedTime));
+        int targetTop = (mFrom + (int) ((mOriginalOffsetTop - mFrom) * interpolatedTime));
         int offset = targetTop - mCircleView.getTop();
         setTargetOffsetTopAndBottom(offset, false /* requires update */);
     }
@@ -883,6 +915,12 @@ public class PullRefreshLayout extends ViewGroup {
         mCircleView.offsetTopAndBottom(offset);
         mCurrentTargetOffsetTop = mCircleView.getTop();
         if (requiresUpdate && android.os.Build.VERSION.SDK_INT < 11) {
+            /**
+             * 刷新函数
+             * onMeasure()
+             * onLayout()
+             * onDraw()
+             */
             invalidate();
         }
     }
