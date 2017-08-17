@@ -8,7 +8,7 @@ import android.widget.ListView;
 import com.pull_more_refresh.R;
 import com.pull_more_refresh.adapter.AdapterImg;
 
-import static com.pull_more_refresh.control.ImageControl.getTestData;
+import static com.pull_more_refresh.control.AsyncImageLoader.getTestData;
 
 public class LoadImgActivity extends AppCompatActivity {
 

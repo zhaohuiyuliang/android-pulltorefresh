@@ -30,12 +30,12 @@ import java.util.Map;
  * Created by wangliang on 2017/6/28.
  */
 
-public class ImageControl extends BaseControl implements TaskRunnable.FileSaveListener {
+public class AsyncImageLoader extends BaseControl implements TaskRunnable.FileSaveListener {
     private Map<String, Bitmap> bitmapMap;
     private AbsBaseAdapter mAbsBaseAdapter;
     private LIFOThreadPoolProcessor mPoolProcessor;
 
-    public ImageControl(AbsBaseAdapter mAbsBaseAdapter) {
+    public AsyncImageLoader(AbsBaseAdapter mAbsBaseAdapter) {
         this.mAbsBaseAdapter = mAbsBaseAdapter;
         mPoolProcessor = new LIFOThreadPoolProcessor(50);
     }

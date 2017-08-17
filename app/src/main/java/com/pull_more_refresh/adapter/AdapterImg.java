@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pull_more_refresh.R;
-import com.pull_more_refresh.control.ImageControl;
+import com.pull_more_refresh.control.AsyncImageLoader;
 import com.pull_more_refresh.model.ImageBean;
 
 import java.util.List;
@@ -20,12 +20,12 @@ import java.util.List;
 public class AdapterImg extends AbsBaseAdapter {
     private List<ImageBean> mImageOjList;
     private Context mContext;
-    private ImageControl mImageControl;
+    private AsyncImageLoader mAsyncImageLoader;
 
     public AdapterImg(Context mContext, List<ImageBean> imageOjList) {
         this.mContext = mContext;
         this.mImageOjList = imageOjList;
-        mImageControl = new ImageControl(this);
+        mAsyncImageLoader = new AsyncImageLoader(this);
 
     }
 
@@ -58,7 +58,7 @@ public class AdapterImg extends AbsBaseAdapter {
         }
         ImageBean imageBean = mImageOjList.get(position);
         viewhold.img_pht.setTag(imageBean.getID());
-        mImageControl.loadImage(imageBean, viewhold.img_pht);
+        mAsyncImageLoader.loadImage(imageBean, viewhold.img_pht);
         viewhold.tv_id.setText(String.valueOf(imageBean.getID()) + " *** "+imageBean.getFileName());
         return convertView;
     }
